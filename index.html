@@ -1050,7 +1050,7 @@
 
                     <!-- Submit Button -->
                     <button type="submit" class="w-full py-3 rounded-xl font-bold text-sm bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-700 hover:to-indigo-700 text-white shadow-md transition-all flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-paper-plane"></i> Gửi Thông Tin Đến Quản Lý (SM Cần)
+                        <i class="fa-solid fa-paper-plane"></i> Gửi Thông Tin Đến Quản Lý (SM Cần) Qua Zalo
                     </button>
 
                     <p class="text-center text-[11px] text-slate-500">
@@ -1061,21 +1061,35 @@
         </div>
     </section>
 
-    <!-- Success Modal -->
-    <div id="success-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm hidden p-4">
-        <div class="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl space-y-4">
-            <div class="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mx-auto">
-                <i class="fa-solid fa-check"></i>
+    <!-- Success Modal & Zalo Redirection -->
+    <div id="success-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 backdrop-blur-sm hidden p-4">
+        <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full text-center shadow-2xl space-y-4">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mx-auto shadow-sm">
+                <i class="fa-solid fa-comment-dots"></i>
             </div>
-            <h3 class="text-xl font-bold text-slate-900">Tiếp Nhận Thành Công</h3>
-            <p class="text-sm text-slate-600">
-                Cảm ơn bạn <strong id="modal-candidate-name"></strong>. Thông tin đã được gửi đến <strong>SM P.T. Cần</strong>. Quản lý sẽ liên hệ trao đổi công việc qua Zalo/Điện thoại trong vòng 24 giờ làm việc.
-            </p>
-            <div class="pt-2 flex flex-col gap-2">
-                <a href="https://zalo.me/0903101248" target="_blank" class="w-full py-3 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm transition-colors flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-comment-dots"></i> Nhắn Zalo Trực Tiếp: 0903 101 248
+            
+            <div>
+                <h3 class="text-xl font-bold text-slate-900">Sẵn Sàng Gửi Tin Nhắn Zalo!</h3>
+                <p class="text-xs sm:text-sm text-slate-600 mt-1">
+                    Hồ sơ của bạn <strong id="modal-candidate-name"></strong> đã được đóng gói và <strong class="text-emerald-600">tự động sao chép</strong> vào bộ nhớ máy.
+                </p>
+            </div>
+
+            <!-- Preview Message Box -->
+            <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-left text-xs font-sans text-slate-700 space-y-1 max-h-36 overflow-y-auto" id="modal-msg-preview">
+                <!-- Injected via JS -->
+            </div>
+
+            <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-[11px] text-left flex items-start gap-2">
+                <i class="fa-solid fa-circle-info text-amber-600 mt-0.5 shrink-0"></i>
+                <span>Bấm nút <strong>"Mở Zalo Gửi Cho SM Cần"</strong> bên dưới, sau đó chỉ cần chọn <strong>Dán (Paste)</strong> vào khung chat để gửi đi.</span>
+            </div>
+
+            <div class="pt-1 flex flex-col gap-2.5">
+                <a id="modal-zalo-link" href="https://zalo.me/0903101248" target="_blank" rel="noopener noreferrer" class="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i> Mở Zalo Gửi Cho SM Cần (0903 101 248)
                 </a>
-                <button onclick="closeSuccessModal()" class="w-full py-2.5 px-6 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm transition-colors">
+                <button type="button" onclick="closeSuccessModal()" class="w-full py-2 px-6 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors">
                     Đóng
                 </button>
             </div>
@@ -1237,11 +1251,45 @@
             }
         }
 
-        // Form submission simulation
+        // Form submission: Pack message, copy to clipboard and open Zalo
         function handleFormSubmit(event) {
             event.preventDefault();
-            const candName = document.getElementById('cand-name').value;
+            const candName = document.getElementById('cand-name').value.trim();
+            const candPhone = document.getElementById('cand-phone').value.trim();
+            const candLocation = document.getElementById('cand-location').value.trim();
+            const candExpSelect = document.getElementById('cand-exp');
+            const candExp = candExpSelect.options[candExpSelect.selectedIndex].text;
+            const candTarget = document.getElementById('cand-target').value.trim() || 'Thỏa thuận theo năng lực';
+
+            // Construct readable message for Zalo
+            const zaloMessage = `Chào SM P.T. Cần, tôi muốn đăng ký ứng tuyển vào nhánh Direct Sales (DRS) Nextgrowth:\n` +
+                                `• Họ và tên: ${candName}\n` +
+                                `• SĐT/Zalo: ${candPhone}\n` +
+                                `• Khu vực làm việc: ${candLocation}\n` +
+                                `• Kinh nghiệm: ${candExp}\n` +
+                                `• Mục tiêu thu nhập: ${candTarget}\n` +
+                                `(Ứng viên đăng ký qua Landing Page tuyển dụng)`;
+
+            // Copy to clipboard using execCommand
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = zaloMessage;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            // Update modal preview
             document.getElementById('modal-candidate-name').textContent = candName;
+            document.getElementById('modal-msg-preview').innerHTML = `
+                <div class="font-semibold text-slate-900 border-b border-slate-200 pb-1 mb-1">Nội dung tin nhắn đã sao chép:</div>
+                <div><strong>Họ tên:</strong> ${candName}</div>
+                <div><strong>SĐT/Zalo:</strong> ${candPhone}</div>
+                <div><strong>Khu vực:</strong> ${candLocation}</div>
+                <div><strong>Kinh nghiệm:</strong> ${candExp}</div>
+                <div><strong>Mục tiêu:</strong> ${candTarget}</div>
+            `;
+
+            // Open modal
             document.getElementById('success-modal').classList.remove('hidden');
             document.getElementById('recruitment-form').reset();
         }
