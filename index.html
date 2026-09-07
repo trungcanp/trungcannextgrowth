@@ -74,6 +74,50 @@
             animation: shimmer 2.5s infinite;
             content: '';
         }
+
+        /* Banner Holographic Light Sweep */
+        @keyframes sheenPass {
+            0% { transform: translateX(-120%) rotate(25deg); opacity: 0; }
+            20% { opacity: 0.65; }
+            45% { transform: translateX(220%) rotate(25deg); opacity: 0; }
+            100% { transform: translateX(220%) rotate(25deg); opacity: 0; }
+        }
+        .banner-sheen {
+            position: relative;
+            overflow: hidden;
+        }
+        .banner-sheen::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -30%;
+            width: 60%;
+            height: 200%;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.45) 50%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            animation: sheenPass 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            pointer-events: none;
+        }
+
+        /* Ambient glowing background aura */
+        @keyframes auraFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.45; }
+            50% { transform: translate(15px, -10px) scale(1.08); opacity: 0.8; }
+        }
+        .animate-aura {
+            animation: auraFloat 5s ease-in-out infinite;
+        }
+        .hover-lift {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 30px -10px rgba(15, 23, 42, 0.12);
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased font-sans selection:bg-brand-500 selection:text-white">
@@ -98,10 +142,10 @@
                 </div>
                 <div class="min-w-0">
                     <div class="font-bold text-slate-900 text-sm sm:text-base leading-tight flex items-center gap-1.5 truncate">
-                        <span class="truncate"><span class="hidden sm:inline">Quản lý kinh doanh </span>SM P.T. Cần</span>
-                        <span class="text-[9px] sm:text-[10px] bg-blue-100 text-blue-800 font-bold px-1.5 py-0.5 rounded shrink-0">DRS</span>
+                        <span class="truncate"><span class="hidden sm:inline">Trưởng Phòng Kinh Doanh </span>SM Phạm Trung Cần</span>
+                        <span class="text-[9px] sm:text-[10px] bg-blue-100 text-blue-800 font-bold px-1.5 py-0.5 rounded shrink-0">Mekong06</span>
                     </div>
-                    <div class="text-[10px] sm:text-[11px] text-slate-500 truncate">Kênh Direct Sales • Nextgrowth</div>
+                    <div class="text-[10px] sm:text-[11px] text-slate-500 truncate">Vùng Mekong • Cần Thơ • Nextgrowth DRS</div>
                 </div>
             </div>
 
@@ -133,24 +177,46 @@
     </header>
 
     <!-- Hero Section -->
-    <section class="relative pt-10 pb-16 lg:pb-20 overflow-hidden gradient-hero">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+    <section class="relative pt-6 pb-16 lg:pb-20 overflow-hidden gradient-hero">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            
+            <!-- Animated Hero Banner Container -->
+            <div class="max-w-4xl mx-auto relative group perspective-1000">
+                <!-- Ambient Dynamic Glow Aura behind image -->
+                <div class="absolute -inset-1.5 bg-gradient-to-r from-blue-600 via-cyan-500 to-indigo-600 rounded-3xl blur-xl opacity-35 group-hover:opacity-75 transition duration-1000 animate-aura"></div>
+                
+                <!-- Main Animated Image Card -->
+                <div id="banner-3d-card" class="relative rounded-3xl overflow-hidden shadow-2xl border border-white/60 bg-white transition-transform duration-300 ease-out banner-sheen">
+                    <!-- The User's Image File on Host -->
+                    <img src="IMG_1498_Original.jpeg" 
+                         alt="Thông báo bổ nhiệm Trưởng Phòng Kinh Doanh SM Phạm Trung Cần - Mekong06 Nextgrowth" 
+                         class="w-full h-auto object-cover rounded-3xl transform transition duration-700 group-hover:scale-[1.015]"
+                         onerror="this.onerror=null; this.src='https://placehold.co/1200x520/0f172a/ffffff?text=Nextgrowth+-+SM+Ph%E1%BA%A1m+Trung+C%E1%BA%A7n+-+Mekong06';" />
+                    
+                    <!-- Dynamic Glowing Verified Status Badge -->
+                    <div class="absolute top-3 right-3 sm:top-4 sm:right-4 bg-slate-900/85 backdrop-blur-md text-amber-300 border border-amber-400/50 text-[10px] sm:text-xs font-bold px-3.5 py-1.5 rounded-full shadow-xl flex items-center gap-1.5 tracking-wide">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                        <i class="fa-solid fa-certificate text-amber-400"></i> Xác thực Quản lý: Mekong06 • Cần Thơ
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center pt-2">
                 
                 <!-- Left Hero Content -->
                 <div class="lg:col-span-7 space-y-5 text-center lg:text-left">
                     <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-100/80 border border-blue-200 text-brand-700 text-xs sm:text-sm font-semibold">
                         <span class="w-2 h-2 rounded-full bg-brand-500 animate-ping"></span>
-                        Thông tin tuyển dụng trực tiếp từ Quản lý: P.T. Cần
+                        Tuyển dụng trực tiếp: Nhánh SM Phạm Trung Cần (Mekong06)
                     </div>
                     
                     <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-slate-900 leading-[1.2]">
                         Phát Triển Sự Nghiệp Tài Chính 4.0<br>
-                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600">Tại Kênh Direct Sales (DRS)</span>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600">Tại Nhánh SM Phạm Trung Cần (DRS)</span>
                     </h1>
                     
                     <p class="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                        Cơ hội gia nhập đội ngũ Tư vấn Tài chính (FA) trực thuộc quản lý của <strong>SM P.T. Cần</strong>. Làm chủ hệ sinh thái tài chính số: Cho vay tiêu dùng, Thẻ tín dụng và Bảo hiểm ngay trên một ứng dụng. Lương cơ bản <strong>5.500.000đ</strong> khi ký HĐLĐ, thưởng mốc, thưởng vượt KPI và chính sách hỗ trợ phát triển riêng từ Quản lý nhánh.
+                        Cơ hội gia nhập đội ngũ Tư vấn Tài chính (FA) trực thuộc quản lý của <strong>SM Phạm Trung Cần (Mekong06 - Cần Thơ)</strong>. Làm chủ hệ sinh thái tài chính số: Cho vay tiêu dùng, Thẻ tín dụng và Bảo hiểm ngay trên một ứng dụng. Lương cơ bản <strong>5.500.000đ</strong> khi ký HĐLĐ, thưởng mốc, thưởng vượt KPI và chính sách hỗ trợ riêng từ Quản lý nhánh.
                     </p>
 
                     <!-- Exclusive Manager Support Program Card -->
@@ -160,7 +226,7 @@
                                 <i class="fa-solid fa-gift"></i> Chính Sách Đồng Hành Từ Quản Lý
                             </div>
                             <span class="text-xs text-amber-900 bg-amber-100/80 px-2.5 py-1 rounded-lg border border-amber-200 font-medium">
-                                *Chương trình hỗ trợ nội bộ từ SM P.T. Cần, không thuộc quỹ chung công ty
+                                *Chương trình hỗ trợ nội bộ từ SM Phạm Trung Cần, không thuộc quỹ chung công ty
                             </span>
                         </div>
 
@@ -173,7 +239,7 @@
                                     Hỗ trợ thêm <span class="text-amber-700 font-extrabold underline decoration-amber-400">Cashback 2.000 VNĐ</span> / mỗi 1 điểm KPI
                                 </div>
                                 <p class="text-xs sm:text-sm text-slate-600 mt-1 leading-relaxed">
-                                    Khoản hỗ trợ do Quản lý (SM Cần) trực tiếp trích từ quỹ quản lý nhằm khích lệ tinh thần và đồng hành cùng nhân sự trong nhánh. Ứng viên thuộc các nhánh khác sẽ không áp dụng cơ chế này.
+                                    Khoản hỗ trợ do Quản lý (SM Phạm Trung Cần) trực tiếp trích từ quỹ quản lý nhằm khích lệ tinh thần và đồng hành cùng nhân sự trong nhánh Mekong06. Ứng viên thuộc các nhánh khác sẽ không áp dụng cơ chế này.
                                 </p>
                             </div>
                         </div>
@@ -454,7 +520,7 @@
             <!-- Product Cards Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Product 1: BMI Bancas -->
-                <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover-lift relative overflow-hidden">
                     <div class="absolute top-4 right-4 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">
                         CVR: 78%
                     </div>
@@ -480,7 +546,7 @@
                 </div>
 
                 <!-- Product 2: FECREDIT Cash Loan -->
-                <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover-lift relative overflow-hidden">
                     <div class="absolute top-4 right-4 px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 text-xs font-bold">
                         CVR: 16%
                     </div>
@@ -506,7 +572,7 @@
                 </div>
 
                 <!-- Product 3: VPBank Credit Card -->
-                <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+                <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover-lift relative overflow-hidden">
                     <div class="absolute top-4 right-4 px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-xs font-bold">
                         Duyệt 5 phút
                     </div>
@@ -1151,6 +1217,23 @@
         const salaryCashbackEl = document.getElementById('salary-cashback');
         const salaryTotalEl = document.getElementById('salary-total');
         const insuranceTagEl = document.getElementById('insurance-tag');
+
+        // Smooth 3D tilt interaction on the banner
+        const bannerCard = document.getElementById('banner-3d-card');
+        if (bannerCard) {
+            bannerCard.parentElement.addEventListener('mousemove', (e) => {
+                const rect = bannerCard.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                const rotX = -(y / (rect.height / 2)) * 6; // Max 6 deg
+                const rotY = (x / (rect.width / 2)) * 6;
+                bannerCard.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.01, 1.01, 1.01)`;
+            });
+
+            bannerCard.parentElement.addEventListener('mouseleave', () => {
+                bannerCard.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            });
+        }
 
         function formatVND(amount) {
             return new Intl.NumberFormat('vi-VN').format(Math.round(amount)) + ' đ';
